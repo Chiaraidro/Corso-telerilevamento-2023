@@ -1,0 +1,20 @@
+##LEZIONE 30/03 
+
+library(raster)
+
+setwd("C:/Laboratorio_telerilevamento/greenland") #setto la cartella di lavoro greenland 
+
+#usiamo la funzione raster per importare bande o layer singoli (la funzione brick invece importava una immagine tutta insieme) 
+lst2000<- raster("lst_2000.tif")
+plot(lst2000)
+
+#importiamo gli altri file della cartella 
+lst2005<- raster("lst_2005.tif")
+lst2010<- raster("lst_2010.tif")
+lst2015<- raster("lst_2015.tif")
+
+#Come faccio a fare questo processo di importazione una volta per tutte le immagini? 
+#utilizzo la funzione lapply: applica una funzione ad una lista di oggetti 
+#per creare una lista utilizzo la funzione list.files, uso pattern per avere un nome in comune a tutte le immagini 
+rlist <- list.files(pattern="lst") #ottengo una lista (non ho ancora importato le immagini) 
+import <- lapply(rlist, raster)   #importo i dati con la funzione raster
