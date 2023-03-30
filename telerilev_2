@@ -1,0 +1,76 @@
+##LEZIONE 30/03/2023
+
+
+setwd("C:/Laboratorio_telerilevamento/") # setting cartella 
+
+# importare il file defor1_.png e dargli il nome l1992 
+
+l1992 <- brick("defor1_.png")
+
+#plottiamo l'immagine 
+plotRGB(l1992, r=1, g=2, b=3, stretch="lin")
+
+# layer 1 = NIR
+# layer 2 = red
+# layer 3 = green
+
+
+#importiamo il secondo file e plottiamolo  
+l2006 <- brick("defor2.png")
+plotRGB(l2006, r=1, g=2, b=3, stretch="lin")
+
+# Esercizio: plotta in colonna le due immagini ottenute 
+par(mfrow=c(2,1))
+plotRGB(l1992, r=1, g=2, b=3, stretch="lin")
+plotRGB(l2006, r=1, g=2, b=3, stretch="lin")
+
+# caclolo DVI (Difference Vegetation Index):differenza tra NIR e rosso 
+dvi1992 = l1992[[1]] - l1992[[2]]
+
+#rappresentiamo il DVI con uno specifico schema di colori 
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(dvi1992, col=cl)
+
+# DVI Difference Vegetation Index
+dvi2006 = l2006[[1]] - l2006[[2]]
+dvi2006
+
+plot(dvi2006, col=cl)
+
+
+# DVI difference in time
+dvi_dif = dvi1992 - dvi2006
+cld <- colorRampPalette(c('blue','white','red'))(100) #blu per valori alti di differenza, rosso bassa differenza, bianco medio 
+plot(dvi_dif, col=cld)
+
+# osserviamo il numero di bit di DVI e NDVI 
+# Range DVI (8 bit): -255 a 255 #questo non si può usare per paragonare immagini con bit diverso 
+# Range NDVI (8 bit): -1 a 1 #si può usare sempre 
+
+# Range DVI (16 bit): -65535 a 65535
+# Range NDVI (16 bit): -1 a 1
+
+
+# calcolo DVI e NDVI per la foto l1992
+dvi1992 = l1992[[1]] - l1992[[2]]
+ndvi1992 = (l1992[[1]] - l1992[[2]]) / (l1992[[1]] + l1992[[2]]) #questa è infatti l'equazione del NDVI 
+
+#plottiamo l'NDVI ottenuto 
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(ndvi1992, col=cl)
+
+#calcolo NDVI 2006 e plottiamo 
+ndvi2006 = dvi2006 / (l2006[[1]] + l2006[[2]])
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(ndvi2006, col=cl)
+
+#eseguiamo la differenza tra i due ndvi e plottiamo con la scala di colori cl
+difndvi= ndvi1992 - ndvi2006
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(difndvi, col=cl)
+
+
+
+
+
+
