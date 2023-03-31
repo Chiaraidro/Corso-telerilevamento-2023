@@ -1,3 +1,5 @@
+###LAVORO SU SCIOGLIMENTO GHIACCIAI (in particolare su aumento temepratura suolo) 
+
 ##LEZIONE 30/03 
 
 library(raster)
@@ -18,3 +20,27 @@ lst2015<- raster("lst_2015.tif")
 #per creare una lista utilizzo la funzione list.files, uso pattern per avere un nome in comune a tutte le immagini 
 rlist <- list.files(pattern="lst") #ottengo una lista (non ho ancora importato le immagini) 
 import <- lapply(rlist, raster)   #importo i dati con la funzione raster
+
+
+## LEZIONE 31/03
+
+#posso uusare stack per mettere insieme tutte le immagini in uno stesso oggetto 
+unione <- stack(rlist)
+plot(unione)
+
+#creo un RGB
+plotRGB(unione, r=1, g=2, b=3, stretch="lin")    #rappresento maggiori temperature per ogni annata 
+plotRGB(unione, r=2, g=3, b=4, stretch="lin")
+
+#eseguiamo una differenza tra due annate (imm2000-imm2005 e vediamo dove temperatura è aumentata) 
+dift= unione[[2]]-unione[[1]]
+plot(dift)   #dove ho valori alti c'è una maggiore differenza 
+
+cldif <- colorRampPalette(c('blue','white','red'))(100) #
+plot(dift, col=cldif)
+
+## SETTO UNA NUOVA CARTELLA EN 
+
+setwd("C:/Laboratorio_telerilevamento/EN")
+
+
