@@ -43,4 +43,5 @@ plot(dift, col=cldif)
 
 setwd("C:/Laboratorio_telerilevamento/EN")
 
+## LEZIONI 13/04 E 14/04 
 
