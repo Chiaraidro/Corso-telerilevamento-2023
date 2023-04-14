@@ -45,3 +45,34 @@ setwd("C:/Laboratorio_telerilevamento/EN")
 
 ## LEZIONI 13/04 E 14/04 
 
+#importiamo e plottiamo le prime immagini (singolarmente) 
+en01 <- raster("EN_0001.png")
+cl <- colorRampPalette(c('red','orange','yellow'))(100) #
+plot(en01, col=cl)
+
+en13 <- raster("EN_0013.png")
+plot(en13, col=cl)
+
+#importiamo tutte le immagini con un unico comando [lapply(X, funzione da applicare)]
+lista <- list.files(pattern="EN")
+importazione <- lapply(lista,raster) 
+
+# stack
+en <- stack(importazione)
+
+# plot everything
+plot(en, col=cl)
+
+#plottiamo En1 e EN13 vicine 
+par(mfrow=c(1,2))
+plot(en[[1]], col=cl)
+plot(en[[13]], col=cl)
+
+#eseguiamo la differenza tra le due immagini 
+difen <-  en[[1]] - en[[13]]
+cldif <- colorRampPalette(c('blue','white','red'))(100) #
+plot(difen, col=cldif)
+
+# plotRGB di tre file uniti 
+plotRGB(en, r=1, g=7, b=13, stretch="lin")
+plotRGB(en, r=1, g=7, b=13, stretch="hist")
