@@ -1,0 +1,21 @@
+## IDENTIFICAZIONE DELLA PORZIONE DI VEGETAZIONE BOSCHIVA DISTRUTTA DALLA TEMPESTA VAIA (2018) 
+
+# impostazione ed installazione di pacchetti utili 
+install.packages(raster)
+install.packages("ncdf4")
+install.packages(ncdf4)
+install.packages(ggplot2)
+install.packages(viridis)
+
+library(raster)
+library("ncdf4")
+library(ncdf4)
+library(ggplot2)
+library(viridis)
+
+setwd("C:/Vaia/") # settaggio cartella di lavoro per sistema Windows
+
+#plotto immagine scaricate da sentinel copernicus 
+pre <- raster("~/Vaia/foto pre/T32TQS_20230707T100559_B04")
+pre 
+plot(pre)
