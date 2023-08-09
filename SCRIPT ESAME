@@ -13,9 +13,35 @@ library(ncdf4)
 library(ggplot2)
 library(viridis)
 
-setwd("C:/Vaia/") # settaggio cartella di lavoro per sistema Windows
+setwd("C:/Vaia") # settaggio cartella di lavoro per sistema Windows
 
-#plotto immagine scaricate da sentinel copernicus 
-pre <- raster("~/Vaia/foto pre/T32TQS_20230707T100559_B04")
-pre 
-plot(pre)
+# caricamento e plottaggio delle immagini pre e post tempesta 
+Pre <- brick("False9.png")
+plotRGB(Pre, r=1, g=2, b=3, stretch="lin")
+
+Post <- brick("False11.png")
+plotRGB(Post, r=1, g=2, b=3, stretch="lin")
+
+# calcolo NDVI delle due immagini 
+ndviPre = (Pre[[1]] - Pre[[2]]) / (Pre[[1]] + Pre[[2]])
+ndviPost = (Post[[1]] - Post[[2]]) / (Post[[1]] + Post[[2]])
+
+#plottiamo NDVI
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(ndviPre, col=cl)
+
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(ndviPost, col=cl)
+
+# mettiamo a confronto le immagini 
+par(mfrow=c(1,2))
+plot(ndviPre, col=cl)
+plot(ndviPre, col=cl)
+
+#eseguiamo la differenza tra i due NDVI e plottiamo con la scala di colori cl
+difndvi= ndviPre - ndviPost
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(difndvi, col=cl)
+
+
+
