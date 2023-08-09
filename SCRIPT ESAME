@@ -36,7 +36,7 @@ plot(ndviPost, col=cl)
 # mettiamo a confronto le immagini 
 par(mfrow=c(1,2))
 plot(ndviPre, col=cl)
-plot(ndviPre, col=cl)
+plot(ndviPost, col=cl)
 
 #eseguiamo la differenza tra i due NDVI e plottiamo con la scala di colori cl
 difndvi= ndviPre - ndviPost
