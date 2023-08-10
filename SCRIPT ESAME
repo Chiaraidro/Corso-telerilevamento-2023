@@ -32,15 +32,6 @@ dev.off()
 ndviPre = (Pre[[1]] - Pre[[2]]) / (Pre[[1]] + Pre[[2]])
 ndviPost = (Post[[1]] - Post[[2]]) / (Post[[1]] + Post[[2]])
 
-ndvi_values <- getValues(ndviPre)
-ndvi_breaks <- c(-1, 0.2, 0.4, 0.6, 0.8, 1)
-ndvi_categories <- cut(ndvi_values, breaks = ndvi_breaks, include.lowest = TRUE)
-ndvi_labels <- c("Bassa vegetazione", "Media vegetazione", "Alta vegetazione", "Copertura densa", "Non vegetato")
-ndvi_categories <- factor(ndvi_categories, levels = ndvi_labels)
-plot(ndvi_categories, main = "Categorizzazione dell'NDVI")
-
-
-
 #plottiamo NDVI distinti 
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
 plot(ndviPre, col=cl)
@@ -54,6 +45,17 @@ pdf("multiframe.pdf") #al posto di mutliframe inserire il nome desiderato con cu
 par(mfrow=c(1,2))
 plot(ndviPre, col=cl)
 plot(ndviPost, col=cl)
+dev.off()
+
+#creazione istogrammi 
+par(mfrow=c(1,2))
+ndvi_valuesPre <- getValues(ndviPre)
+v <-as.vector(ndvi_valuesPre)
+hist(v, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza")
+
+ndvi_valuesPost <- getValues(ndviPost)
+v <-as.vector(ndvi_valuesPost)
+hist(v, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza")
 dev.off()
 
 
