@@ -6,42 +6,64 @@ install.packages("ncdf4")
 install.packages(ncdf4)
 install.packages(ggplot2)
 install.packages(viridis)
+install.packages("rgdal")
 
 library(raster)
 library("ncdf4")
 library(ncdf4)
 library(ggplot2)
 library(viridis)
+library(rgdal)
 
-setwd("C:/Vaia") # settaggio cartella di lavoro per sistema Windows
+# settaggio cartella di lavoro (scegliere il proprio sistema operativo con #) 
+setwd("C:/Vaia") # Windows
+# setwd("~/Vaia") # Linux
+# setwd("/Users/emma/desktop/Vaia") #mac
 
 # caricamento e plottaggio delle immagini pre e post tempesta 
-Pre <- brick("False9.png")
+Pre <- brick("False9.png") # immagine pre tempesta 
 plotRGB(Pre, r=1, g=2, b=3, stretch="lin")
 
-Post <- brick("False11.png")
+Post <- brick("False11.png") #immagine post tempesta 
 plotRGB(Post, r=1, g=2, b=3, stretch="lin")
+dev.off()
 
 # calcolo NDVI delle due immagini 
 ndviPre = (Pre[[1]] - Pre[[2]]) / (Pre[[1]] + Pre[[2]])
 ndviPost = (Post[[1]] - Post[[2]]) / (Post[[1]] + Post[[2]])
 
-#plottiamo NDVI
-cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # specifying a color scheme
+ndvi_values <- getValues(ndviPre)
+ndvi_breaks <- c(-1, 0.2, 0.4, 0.6, 0.8, 1)
+ndvi_categories <- cut(ndvi_values, breaks = ndvi_breaks, include.lowest = TRUE)
+ndvi_labels <- c("Bassa vegetazione", "Media vegetazione", "Alta vegetazione", "Copertura densa", "Non vegetato")
+ndvi_categories <- factor(ndvi_categories, levels = ndvi_labels)
+plot(ndvi_categories, main = "Categorizzazione dell'NDVI")
+
+
+
+#plottiamo NDVI distinti 
+cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
 plot(ndviPre, col=cl)
 
-cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # specifying a color scheme
+cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
 plot(ndviPost, col=cl)
+dev.off()
 
-# mettiamo a confronto le immagini 
+# mettiamo a confronto i due NDVI e esportiamoli in formato pdf 
+pdf("multiframe.pdf") #al posto di mutliframe inserire il nome desiderato con cui il file verrà esportato 
 par(mfrow=c(1,2))
 plot(ndviPre, col=cl)
 plot(ndviPost, col=cl)
+dev.off()
+
 
 #eseguiamo la differenza tra i due NDVI e plottiamo con la scala di colori cl
 difndvi= ndviPre - ndviPost
-cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # specifying a color scheme
+cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
+pdf("image.pdf") # al posto di image inserire il nome desiderato con cui il file verrà esportato 
 plot(difndvi, col=cl)
+dev.off()
+
 
 
 
