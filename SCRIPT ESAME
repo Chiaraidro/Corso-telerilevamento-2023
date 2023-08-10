@@ -51,11 +51,11 @@ dev.off()
 par(mfrow=c(1,2))
 ndvi_valuesPre <- getValues(ndviPre)
 v <-as.vector(ndvi_valuesPre)
-hist(v, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza")
+hist(v, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="green")
 
 ndvi_valuesPost <- getValues(ndviPost)
 v <-as.vector(ndvi_valuesPost)
-hist(v, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza")
+hist(v, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="yellow")
 dev.off()
 
 
