@@ -50,12 +50,12 @@ dev.off()
 #creazione istogrammi 
 par(mfrow=c(1,2))
 ndvi_valuesPre <- getValues(ndviPre)
-v <-as.vector(ndvi_valuesPre)
-hist(v, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="green")
+v1 <-as.vector(ndvi_valuesPre)
+hist(v1, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="green")
 
 ndvi_valuesPost <- getValues(ndviPost)
-v <-as.vector(ndvi_valuesPost)
-hist(v, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="yellow")
+v2 <-as.vector(ndvi_valuesPost)
+hist(v2, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="yellow")
 dev.off()
 
 
@@ -66,6 +66,25 @@ pdf("image.pdf") # al posto di image inserire il nome desiderato con cui il file
 plot(difndvi, col=cl)
 dev.off()
 
+# analizziamo la situazione oggi 2023 
+Oggi<- brick("False2023.png") #immagine oggi
+plotRGB(Oggi, r=1, g=2, b=3, stretch="lin")
+ndviOggi = (Oggi[[1]] - Oggi[[2]]) / (Oggi[[1]] + Oggi[[2]])
+cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
+plot(ndviOggi, col=cl)
+ndvi_valuesOggi <- getValues(ndviOggi)
+v3 <-as.vector(ndvi_valuesOggi)
+hist(v3, main = "Istogramma situazione Oggi", xlab = "NDVI", ylab = "Frequenza",col="red")
 
+#mettiamo a confortno tutte le immagini e gli istogrammi 
+par(mfrow=c(1,3))
+hist(v1, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="green")
+hist(v2, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="yellow")
+hist(v3, main = "Istogramma situazione Oggi", xlab = "NDVI", ylab = "Frequenza",col="red")
+dev.off()
 
-
+par(mfrow=c(1,3))
+plot(ndviPre, col=cl)
+plot(ndviPost, col=cl)
+plot(ndviOggi, col=cl)
+dev.off()
