@@ -18,73 +18,82 @@ library(rgdal)
 # settaggio cartella di lavoro (scegliere il proprio sistema operativo con #) 
 setwd("C:/Vaia") # Windows
 # setwd("~/Vaia") # Linux
-# setwd("/Users/emma/desktop/Vaia") #mac
+# setwd("/Users/emma/desktop/Vaia") # Mac
 
-# caricamento e plottaggio delle immagini pre e post tempesta 
-Pre <- brick("False9.png") # immagine pre tempesta 
+# caricamento e visualizzazione delle immagini pre e post tempesta 
+Pre <- brick("False9.png") # caricamento immagine pre tempesta 
 plotRGB(Pre, r=1, g=2, b=3, stretch="lin")
 
-Post <- brick("False11.png") #immagine post tempesta 
+
+Post <- brick("False11.png") # caricamento immagine post tempesta 
 plotRGB(Post, r=1, g=2, b=3, stretch="lin")
 dev.off()
 
 # calcolo NDVI delle due immagini 
-ndviPre = (Pre[[1]] - Pre[[2]]) / (Pre[[1]] + Pre[[2]])
-ndviPost = (Post[[1]] - Post[[2]]) / (Post[[1]] + Post[[2]])
+ndviPre = (Pre[[1]] - Pre[[2]]) / (Pre[[1]] + Pre[[2]]) # ndvi pre tempesta 
+ndviPost = (Post[[1]] - Post[[2]]) / (Post[[1]] + Post[[2]]) #ndvi post tempesta 
 
 #plottiamo NDVI distinti 
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
 plot(ndviPre, col=cl)
+
 
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
 plot(ndviPost, col=cl)
 dev.off()
 
 # mettiamo a confronto i due NDVI e esportiamoli in formato pdf 
-pdf("multiframe.pdf") #al posto di mutliframe inserire il nome desiderato con cui il file verrà esportato 
-par(mfrow=c(1,2))
-plot(ndviPre, col=cl)
-plot(ndviPost, col=cl)
+pdf("confrontondvi.pdf") #al posto di mutliframe inserire il nome desiderato con cui il file verrà esportato 
+par(mfrow=c(2,1))
+plot(ndviPre, main=" NDVI pre", col=cl)
+plot(ndviPost, main= "NDVI post", col=cl)
 dev.off()
 
-#creazione istogrammi 
+#creazione istogrammi e esportazione 
+pdf("istogrammi_ndvi.pdf") #al posto di istogrammi inserire il nome desiderato con cui il file verrà esportato 
 par(mfrow=c(1,2))
 ndvi_valuesPre <- getValues(ndviPre)
 v1 <-as.vector(ndvi_valuesPre)
-hist(v1, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="green")
+hist(v1, main = "Istogramma NDVI pre", xlab = "NDVI", ylab = "Frequenza",col="green")
 
 ndvi_valuesPost <- getValues(ndviPost)
 v2 <-as.vector(ndvi_valuesPost)
-hist(v2, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="yellow")
+hist(v2, main = "Istogramma NDVI post", xlab = "NDVI", ylab = "Frequenza",col="yellow")
 dev.off()
 
 
 #eseguiamo la differenza tra i due NDVI e plottiamo con la scala di colori cl
 difndvi= ndviPre - ndviPost
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
-pdf("image.pdf") # al posto di image inserire il nome desiderato con cui il file verrà esportato 
-plot(difndvi, col=cl)
+pdf("dif_ndvi.pdf") # al posto di dif.ndvi inserire il nome desiderato con cui il file verrà esportato 
+plot(difndvi, main="differenza NDVI",col=cl)
 dev.off()
 
 # analizziamo la situazione oggi 2023 
-Oggi<- brick("False2023.png") #immagine oggi
+Oggi<- brick("False2023.png") #caricamento immagine oggi
 plotRGB(Oggi, r=1, g=2, b=3, stretch="lin")
 ndviOggi = (Oggi[[1]] - Oggi[[2]]) / (Oggi[[1]] + Oggi[[2]])
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
-plot(ndviOggi, col=cl)
+pdf("ndvi_2023.pdf") # al posto di ndvi_2023 inserire il nome desiderato con cui il file verrà esportato 
+plot(ndviOggi, main="NDVI oggi" col=cl)
+dev.off()
 ndvi_valuesOggi <- getValues(ndviOggi)
 v3 <-as.vector(ndvi_valuesOggi)
-hist(v3, main = "Istogramma situazione Oggi", xlab = "NDVI", ylab = "Frequenza",col="red")
-
-#mettiamo a confortno tutte le immagini e gli istogrammi 
-par(mfrow=c(1,3))
-hist(v1, main = "Istogramma situazione pre Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="green")
-hist(v2, main = "Istogramma situazione post Tempesta di Vaia", xlab = "NDVI", ylab = "Frequenza",col="yellow")
+pdf("istogramma_2023.pdf") # al posto di istogramma_2023 inserire il nome desiderato con cui il file verrà esportato 
 hist(v3, main = "Istogramma situazione Oggi", xlab = "NDVI", ylab = "Frequenza",col="red")
 dev.off()
 
+#mettiamo a confortno tutte le immagini e gli istogrammi 
+pdf("tot_ndvi.pdf") # al posto di tot_ndvi inserire il nome desiderato con cui il file verrà esportato 
 par(mfrow=c(1,3))
-plot(ndviPre, col=cl)
-plot(ndviPost, col=cl)
-plot(ndviOggi, col=cl)
+hist(v1, main = "Istogramma NDVI pre", xlab = "NDVI", ylab = "Frequenza",col="green")
+hist(v2, main = "Istogramma NDVI post", xlab = "NDVI", ylab = "Frequenza",col="yellow")
+hist(v3, main = "Istogramma NDVI 2023", xlab = "NDVI", ylab = "Frequenza",col="red")
+dev.off()
+
+pdf("tot_istogrammi.pdf") # al posto di tot_istogrammi inserire il nome desiderato con cui il file verrà esportato 
+par(mfrow=c(3,1))
+plot(ndviPre, main="NDVI pre", col=cl)
+plot(ndviPost,  main="NDVI post", col=cl)
+plot(ndviOggi,  main="NDVI 2023",col=cl)
 dev.off()
