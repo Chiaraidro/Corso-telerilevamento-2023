@@ -1,4 +1,4 @@
-## r CODE LAND COVER 
+## R CODE LAND COVER 
 
 # setting pacchetto e directory 
 library(raster)
@@ -20,7 +20,7 @@ par(mfrow=c(1,2))
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-# unsupervised classification
+# Classificazione immagini caricate 
 
 # DEFOR1
 # 1. Get all the single values
@@ -35,6 +35,7 @@ kcluster1
 # 3. Set values to a raster on the basis of so
 defor1class <- setValues(defor1[[1]], kcluster1$cluster) # assegnazione di nuovi valori al raster 
 
+# 4. Plottaggio 
 cl <- colorRampPalette(c('yellow','black','red'))(100)
 plot(defor1class, col=cl)
 # class 1: forest
@@ -54,30 +55,34 @@ kcluster2
 # 3. Set values to a raster on the basis of so
 defor2class <- setValues(defor2[[1]], kcluster2$cluster) # assign new values to a raster object
 
+# 4. plottaggio 
 cl <- colorRampPalette(c('yellow','black','red'))(100)
 plot(defor2class, col=cl)
 # class 1: forest
 # class 2: agriculture
 
-# frequuenze 
+# calcolo delle frequenze e delle percentuali (defor1) 
 frequencies1 <- freq(defor1class)  #conta la frequenza di ogni elemento nell'oggetto 
 tot1 = ncell(defor1class)  #conta numero di righe e colonne dell'oggetto 
 percentages1 = frequencies1 * 100 /  tot1
 
-# percent forest: 89.83012
-# percent agriculture: 10.16988
+##risulati ottenuti 
+# percentuale di foreste : 89.83012
+# percentuale di porzione agricola: 10.16988
 
+
+# calcolo delle frequenze e delle percentuali (defor2) 
 frequencies2 <- freq(defor2class)
 tot2 = ncell(defor2class)
 percentages2 = frequencies2 * 100 /  tot2 #ottengo le percentuali di presenza di ogni elemnto all'interno dell'immagine 
 
 # creazione di una matrice con i valori di frequenza 
-cover <- c("Forest","Agriculture")  
+cover <- c("Forest","Agriculture") #il comando c permette la creazione di una matrice 
 percent_1992 <- c(89.83, 10.16)
 percent_2006 <- c(52.06, 47.93)
 
-percentages <- data.frame(cover, percent_1992, percent_2006) #unione delle tre matrici create 
-percentages
+percentages <- data.frame(cover, percent_1992, percent_2006) #il comando permette l'unione delle tre matrici create 
+percentages #visualizzazione di quanto prodotto 
 
 # plottiamo le percentuali su dei grafici 
 ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
