@@ -1,11 +1,10 @@
 ## R CODE VARIABILITY 
 
+#installazione pacchetti e settaggio direcotry 
 library(raster)
-library(RStoolbox) # for image viewing and variability calculation
-library(ggplot2) # for ggplot plotting
-library(patchwork) # multiframe with ggplot2 graphs
-
-library(viridis)
+library(RStoolbox) # pacchetto per il calcolo della varaibilità 
+library(ggplot2) # per ggplot plotting
+library(patchwork) # pacchetto per creare multiframe con i grafici di ggplot2
 
 setwd("C:/laboratorio_telerilevamento/") # Windows
 
@@ -17,12 +16,12 @@ sen <- brick("sentinel.png")
 # band3 = green
 plotRGB(sen, 1, 2, 3, stretch="lin")
 
- calculation of variability over NIR
+# clacolo della variabilità (NIR)
 nir <- sen[[1]]
+sd3 <- focal(nir, matrix(1/9, 3, 3), fun=sd) #funzione per calcolare statistiche focali su un raster 
 
-sd3 <- focal(nir, matrix(1/9, 3, 3), fun=sd)
-
-clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) #
+#plot 
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) #definizione scala colori 
 plot(sd3, col=clsd)
 
 
@@ -40,12 +39,12 @@ geom_raster(sd3d, mapping=aes(x=x, y=y, fill=layer))
 ## questo processo si può fare anche con il pacchetto viridis (contiene diverse palette di colori) 
 install.packages("viridis")
 
-#la funzione applica scle di colori sul pacchetto viridis 
+#la funzione applica scale di colori sul pacchetto viridis 
 #scale_fill_viridis() 
 
 ggplot() +
 geom_raster(sd3d, mapping =aes(x=x, y=y, fill=layer)) +
-scale_fill_viridis() +  #dento le parentesi metto un'opzione o va di default 
+scale_fill_viridis() +  #dentro le parentesi metto un'opzione o va di default 
 ggtitle("Standard deviation by viridis package")
 
 #usiamo la scala di colori magma sempre nel pacchetto virids 
