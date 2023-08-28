@@ -1,4 +1,5 @@
-## Codice per la distribuzione delle specie 
+## Codice per l'analisi della distribuzione delle specie 
+
 # installazione pacchetti 
 install.packages("sdm")
 install.packages("rgdal", dependencies=T)
@@ -39,15 +40,16 @@ lst <- list.files(path=path,pattern='asc$',full.names = T)
 lst
 
 # stack
-preds <- stack(lst)
+preds <- stack(lst) #per creare uno stack di raster (insieme di strati di dati raster che rappresentano
+                    #informazioni sulla stessa area geografica ma su tempi, bande spettrali o variabili diverse)
 
 # plot preds
 cl <- colorRampPalette(c('blue','orange','red','yellow')) (100)
 plot(preds, col=cl)
 
-# plot predictors and occurrences
+# plot predictors 
 plot(preds$elevation, col=cl)
-points(species[species$Occurrence == 1,], pch=16)
+points(species[species$Occurrence == 1,], pch=16) #funzione per tracciare punti su un grafico con le varie specifiche che possiamo scegliere 
 
 plot(preds$temperature, col=cl)
 points(species[species$Occurrence == 1,], pch=16)
@@ -65,14 +67,14 @@ datasdm <- sdmData(train=species, predictors=preds)
 
 m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, data=datasdm, methods = "glm")
 
-# make the raster output layer
+# creiamo un raster come output 
 p1 <- predict(m1, newdata=preds)
 
-# plot the output
+# plot dell'output 
 plot(p1, col=cl)
 points(species[species$Occurrence == 1,], pch=16)
 
-# add to the stack
-s1 <- stack(preds,p1)
+# stack 
+s1 <- stack(preds,p1) #funzione per combinare raster provenienti da file diversi in un unico oggetto
 plot(s1, col=cl)
 
