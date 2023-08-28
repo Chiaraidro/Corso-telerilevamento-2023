@@ -1,3 +1,5 @@
+#COPERNICUS 
+
 #impostazione library e installazione pacchetti 
 library(raster)
 
@@ -9,15 +11,16 @@ library(viridis)
 # scaricare e salvare i dati di Copernicus dal seguente link 
 # https://land.copernicus.vgt.vito.be/PDF/portal/Application.html
 
+#caricamento dati e plot 
 ssoil <- raster("~/Downloads/c_gls_SSM1km_202305090000_CEURO_S1CSAR_V1.2.1.nc")
 ssoil
-
 plot(ssoil)
 
+#plot dati con ggplot 
 ggplot() +
 + geom_raster(ssoil, mapping=aes(x=x, y=y, fill=Surface.Soil.Moisture))
 
-# with viridis
+# ggplot con viridis
 ggplot() +
 geom_raster(ssoil, mapping=aes(x=x, y=y, fill=Surface.Soil.Moisture)) +
 scale_fill_viridis(option="magma")
