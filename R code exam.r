@@ -3,16 +3,10 @@
 
 # impostazione ed installazione di pacchetti utili 
 install.packages(raster)
-install.packages("ncdf4")
 install.packages(ggplot2)
-install.packages(viridis)
-install.packages(rgdal)
 
 library(raster)
-library("ncdf4")
 library(ggplot2)
-library(viridis)
-library(rgdal)
 
 # settaggio cartella di lavoro (scegliere il proprio sistema operativo con #) 
 setwd("C:/Vaia") # Windows
