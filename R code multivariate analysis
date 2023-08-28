@@ -1,0 +1,49 @@
+## R_code_multivariate_analysis
+
+#settaggio pacchetti e direcotry 
+library(raster)
+library(ggplot2)
+
+#setwd("~/lab/") # Linux
+setwd("C:/lab/") # Windows
+# setwd("/Users/name/Desktop/lab/") # Mac
+
+#caricamento immagine png sentinel 
+sen <- brick("sentinel.png")
+sen
+#plot immagine 
+plot(sen)
+
+# Stack 
+sen2 <- stack(sen[[1]], sen[[2]], sen[[3]])
+
+#plottiamo quanto ottenuto dalla funzione stack 
+plot(sen2)
+
+#Applichiamo funzione pairs 
+pairs(sen2) #permette la visualizzazione delle relazioni tra diverse variabili in un insieme di dati
+
+# PCA (Principal Component Analysis)
+sample <- sampleRandom(sen2, 10000) #funzione estrae un certo numero N di valori casuali dall'oggetto raster scelto 
+pca <- prcomp(sample) #funzione cha analizza i componenti 
+
+# variance explained
+summary(pca) #la funzione permette di riassumere le componenti in un oggetto 
+pca
+
+# pc map
+pci <- predict(sen2, pca, index=c(1:2)) #utilizziamo la funzione predict 
+
+plot(pci[[1]])
+
+# plot con ggplot
+pcid <- as.data.frame(pci[[1]], xy=T) #funzione per convertire un oggetto in un frame 
+
+ggplot() +
+geom_raster(pcid, mapping = aes(x=x, y=y, fill=PC1)) +
+scale_fill_viridis()
+
+
+# Funzione aggregate: resampling (ricampionamento)
+senres <- aggregate(sen, fact=10) #la funzione permette di ottenere le statistiche di riepilogo del dato 
+
