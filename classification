@@ -12,56 +12,63 @@ so <- brick("Solar_Orbiter_s_first_views_of_the_Sun_pillars.jpg")
 plotRGB(so, 1, 2, 3, stretch="lin")
 plotRGB(so, 1, 2, 3, stretch="hist")
 
-#classificazione immagine 
-# 1. Get all the single values
+## Processo per classificare l'immagine 
+
+# 1. Prendere tutti i valori singoli 
 singlenr <- getValues(so)
 singlenr
 #
 # set.seed(99)
 
-# 2. Classify
-kcluster <- kmeans(singlenr, centers = 3)
+# 2. classificazione 
+kcluster <- kmeans(singlenr, centers = 3) #cerca di suddividere un insieme di dati in un numero predefinito di cluster
 kcluster
 
-# 3. Set values to a raster on the basis of so
-soclass <- setValues(so[[1]], kcluster$cluster) # assign new values to a raster object
+# 3. Settaggio dei valori di un raster sulla base di quanto definisco con il seguente comando 
+soclass <- setValues(so[[1]], kcluster$cluster) # Assegna nuova valori ad un oggetto raster 
 
+# 4. plotto quanto ottenuto 
 cl <- colorRampPalette(c('yellow','black','red'))(100)
 plot(soclass, col=cl)
 
-# set.seed can be used for repeating the experiment in the same manner for N times
+# il comando set.seed può essere usato per la ripetizione del processo un N numero di volte 
+
 # http://rfunction.com/archives/62
 
-## GRAND CANION 
+## Ripetiamo il processo per il GRAND CANION 
 
+#caricamento immagine 
 gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
 gc
 
+#plot immagine 
 # rosso = 1
 # verde = 2
 # blu = 3
 
-plotRGB(gc, r=1, g=2, b=3, stretch="lin")
+plotRGB(gc, r=1, g=2, b=3, stretch="lin") #lin è predefinito 
 
-# change the stretch to histogram stretching
-plotRGB(gc, r=1, g=2, b=3, stretch="hist")
+# cambiamo lo stretch 
+plotRGB(gc, r=1, g=2, b=3, stretch="hist") #hist permette di migliorare il contrasto dell'immagine 
 
-# classification
+# Classificazione 
 
 # 1. Get values
 singlenr <- getValues(gc)
 singlenr
 
-# 2. Classify
+# 2. Kmenas 
 kcluster <- kmeans(singlenr, centers = 3)
 kcluster
 
 # 3. Set values
-gcclass <- setValues(gc[[1]], kcluster$cluster) # assign new values to a raster object
+gcclass <- setValues(gc[[1]], kcluster$cluster)
 
+#4. plot immagine 
 cl <- colorRampPalette(c('yellow','black','red'))(100)
 plot(gcclass, col=cl)
 
+#calcolo della frequenza e della percentuale 
 frequencies <- freq(gcclass)
 tot = 58076148
 percentages = frequencies * 100 /  tot
