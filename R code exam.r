@@ -1,16 +1,15 @@
 ## IDENTIFICAZIONE DELLA PORZIONE DI VEGETAZIONE BOSCHIVA DISTRUTTA DALLA TEMPESTA VAIA (2018) 
+## Questo codice può essere usato per altre tempeste e territori, variando il set di immagini e gli eventuali nomi assegnati 
 
 # impostazione ed installazione di pacchetti utili 
 install.packages(raster)
 install.packages("ncdf4")
-install.packages(ncdf4)
 install.packages(ggplot2)
 install.packages(viridis)
-install.packages("rgdal")
+install.packages(rgdal)
 
 library(raster)
 library("ncdf4")
-library(ncdf4)
 library(ggplot2)
 library(viridis)
 library(rgdal)
@@ -33,29 +32,21 @@ dev.off()
 ndviPre = (Pre[[1]] - Pre[[2]]) / (Pre[[1]] + Pre[[2]]) # ndvi pre tempesta 
 ndviPost = (Post[[1]] - Post[[2]]) / (Post[[1]] + Post[[2]]) #ndvi post tempesta 
 
-#plottiamo NDVI distinti 
-cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
-plot(ndviPre, col=cl)
-
-
-cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
-plot(ndviPost, col=cl)
-dev.off()
-
 # mettiamo a confronto i due NDVI e esportiamoli in formato pdf 
+cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
 pdf("confrontondvi.pdf") #al posto di mutliframe inserire il nome desiderato con cui il file verrà esportato 
-par(mfrow=c(2,1))
+par(mfrow=c(2,1)) #permette di inserire più immagini in una pagina 
 plot(ndviPre, main=" NDVI pre", col=cl)
 plot(ndviPost, main= "NDVI post", col=cl)
 dev.off()
 
-#creazione istogrammi e esportazione 
+#creazione istogrammi per gli NDVi calcolati e loro esportazione 
+
 pdf("istogrammi_ndvi.pdf") #al posto di istogrammi inserire il nome desiderato con cui il file verrà esportato 
 par(mfrow=c(1,2))
-ndvi_valuesPre <- getValues(ndviPre)
-v1 <-as.vector(ndvi_valuesPre)
-hist(v1, main = "Istogramma NDVI pre", xlab = "NDVI", ylab = "Frequenza",col="green")
-
+ndvi_valuesPre <- getValues(ndviPre) #funzione restituisce una matrice di valori delle celle corrispondenti alle posizioni specificate
+v1 <-as.vector(ndvi_valuesPre) #per trasformare l'oggetto in un vettore
+hist(v1, main = "Istogramma NDVI pre", xlab = "NDVI", ylab = "Frequenza",col="green") #la funzione crea un istogramma 
 ndvi_valuesPost <- getValues(ndviPost)
 v2 <-as.vector(ndvi_valuesPost)
 hist(v2, main = "Istogramma NDVI post", xlab = "NDVI", ylab = "Frequenza",col="yellow")
@@ -65,12 +56,12 @@ dev.off()
 #eseguiamo la differenza tra i due NDVI e plottiamo con la scala di colori cl
 difndvi= ndviPre - ndviPost
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
-pdf("dif_ndvi.pdf") # al posto di dif.ndvi inserire il nome desiderato con cui il file verrà esportato 
+pdf("dif_ndvi.pdf")
 plot(difndvi, main="differenza NDVI",col=cl)
 dev.off()
 
-# Analisi foto post 2018
-F2019<- brick("False2019.png") #caricamento immagine oggi
+# Analisi foto post 2018 per vedere l'evoluzione boschiva fino ad oggi (stesso procedimento usato per l'anno 2018)
+F2019<- brick("False2019.png") #caricamento immagine 2019
 plotRGB(F2019, r=1, g=2, b=3, stretch="lin")
 ndvi2019 = (F2019[[1]] - F2019[[2]]) / (F2019[[1]] + F2019[[2]])
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
@@ -83,7 +74,7 @@ pdf("istogramma_2019.pdf")
 hist(v3, main = "Istogramma situazione 2019", xlab = "NDVI", ylab = "Frequenza",col="red")
 dev.off()
 
-F2020<- brick("False2020.png") #caricamento immagine oggi
+F2020<- brick("False2020.png") #caricamento immagine 2020
 plotRGB(F2020, r=1, g=2, b=3, stretch="lin")
 ndvi2020 = (F2020[[1]] - F2020[[2]]) / (F2020[[1]] + F2020[[2]])
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
@@ -96,7 +87,7 @@ pdf("istogramma_2020.pdf")
 hist(v4, main = "Istogramma situazione 2020", xlab = "NDVI", ylab = "Frequenza",col="red")
 dev.off()
 
-F2021<- brick("False2021.png") #caricamento immagine oggi
+F2021<- brick("False2021.png") #caricamento immagine 2021
 plotRGB(F2021, r=1, g=2, b=3, stretch="lin")
 ndvi2021 = (F2021[[1]] - F2021[[2]]) / (F2021[[1]] + F2021[[2]])
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
@@ -109,7 +100,7 @@ pdf("istogramma_2021.pdf")
 hist(v5, main = "Istogramma situazione 2021", xlab = "NDVI", ylab = "Frequenza",col="red")
 dev.off()
 
-F2022<- brick("False2022.png") #caricamento immagine oggi
+F2022<- brick("False2022.png") #caricamento immagine 2022
 plotRGB(F2022, r=1, g=2, b=3, stretch="lin")
 ndvi2022 = (F2022[[1]] - F2022[[2]]) / (F2022[[1]] + F2022[[2]])
 cl <- colorRampPalette(c('darkred','red','yellow','green'))(100) # necessario specificare una scala di colore 
